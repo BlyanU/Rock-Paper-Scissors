@@ -19,25 +19,53 @@ let playerScore = 0;
 let compScore = 0;
 let playerSelection;
 let computerSelection;
+let buttons = document.querySelectorAll('button');
+let playerScoreText = document.querySelector('#player');
+let compScoreText = document.querySelector('#comp');
+let result = document.querySelector('.result');
+let round = 1;
 
-game();
+playerScoreText.textContent = `You: ${playerScore}`;
+compScoreText.textContent = `Computer: ${compScore}`;
+
+buttons.forEach((button) => {
+  button.addEventListener('click', () => {
+    if (button.id === 'rock'){
+      playerSelection = 'rock';
+    } else if (button.id === 'paper'){
+      playerSelection = 'paper';
+    } else {
+      playerSelection ='scissors';
+    }
+
+    if (round > 5) {
+      alert('You cannot play more than 5 games.');
+      return;
+    }
+
+    game();
+
+    playerScoreText.textContent = `You: ${playerScore}`;
+    compScoreText.textContent = `Computer: ${compScore}`;
+  });
+});
 
 function game() {
-  for (let i = 0; i < 5; i++) {
-    playerSelection = prompt('Pick either rock, paper, or scissors');
+  computerSelection = computerPlay();
 
-    computerSelection = computerPlay();
+  result.textContent = playRound(playerSelection, computerSelection);
 
-    console.log(playRound(playerSelection.toLowerCase(), computerSelection));
+  if (round == 5) {
+    if (playerScore == compScore) {
+      result.textContent = `It's a Draw! ${playerScore} - ${compScore}`;
+    } else if (playerScore > compScore) {
+      result.textContent = `You Win! ${playerScore} - ${compScore}`;
+    } else {
+      result.textContent = `You Lost! ${playerScore} - ${compScore}`;
+    }
   }
 
-  if (playerScore == compScore) {
-    console.log(`It's a Draw! ${playerScore} - ${compScore}`);
-  } else if (playerScore > compScore) {
-    console.log(`You Win! ${playerScore} - ${compScore}`);
-  } else {
-    console.log(`You Lost! ${playerScore} - ${compScore}`);
-  }
+  round++;
 }
 
 /*define function computerPlay()
